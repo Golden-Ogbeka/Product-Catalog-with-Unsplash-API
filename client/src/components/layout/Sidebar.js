@@ -2,14 +2,10 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import {
 	AssignmentTurnedIn,
 	BarChart,
@@ -17,6 +13,7 @@ import {
 	ChatBubble,
 	ConnectWithoutContact,
 	DirectionsWalk,
+	Favorite,
 	Group,
 	Home as HomeIcon,
 	KeyboardArrowDown,
@@ -25,25 +22,29 @@ import {
 } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import LogoImage from '../../assets/logo.png';
 import { NavLink } from 'react-router-dom';
-import { alpha, styled } from '@mui/system';
 import {
 	Avatar,
 	Badge,
 	Button,
-	FormControl,
-	Input,
+	Divider,
 	InputAdornment,
-	InputBase,
-	InputLabel,
+	Menu,
+	MenuItem,
 	TextField,
 } from '@mui/material';
+import Person1 from '../../assets/person1.png';
+import Person2 from '../../assets/person2.jpg';
+import Person3 from '../../assets/person3.png';
+import Person4 from '../../assets/person4.jpg';
+import axios from 'axios';
+import { API_URL } from '../../app.json';
 
 const drawerWidth = 240;
 
 function Sidebar(props) {
+	// For Sidebar
 	const { window } = props;
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -51,6 +52,32 @@ function Sidebar(props) {
 		setMobileOpen(!mobileOpen);
 	};
 
+	// For notification menu
+	const [anchorEl, setAnchorEl] = React.useState(null);
+	const open = Boolean(anchorEl);
+	const handleClick = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
+
+	// For search box
+	const [searchInput, setSearchInput] = React.useState('');
+
+	const searchPicture = async () => {
+		try {
+			props.setPictures([]);
+			const response = await axios.post(`${API_URL}/pictures`, {
+				searchInput,
+			});
+			props.setPictures(response.data.Pictures);
+			console.log(response);
+		} catch (error) {
+			props.setPictures([]);
+			console.log(error);
+		}
+	};
 	const drawer = (
 		<div
 			style={{
@@ -373,11 +400,20 @@ function Sidebar(props) {
 	return (
 		<Box>
 			<CssBaseline />
+
 			<AppBar
 				position='fixed'
 				sx={{
 					width: { sm: `calc(100% - ${drawerWidth}px)` },
 					ml: { sm: `${drawerWidth}px` },
+					backgroundColor: {
+						xs: 'indigo',
+						sm: 'white',
+					},
+				}}
+				style={{
+					// backgroundColor: 'white',
+					boxShadow: 'none',
 				}}
 			>
 				<Toolbar
@@ -394,14 +430,21 @@ function Sidebar(props) {
 					>
 						<MenuIcon />
 					</IconButton>
-					<div
+					<Box
+						sx={{
+							display: {
+								xs: 'none',
+								sm: 'flex',
+							},
+						}}
 						style={{
-							display: 'flex',
 							position: 'relative',
 							flexGrow: 1,
 						}}
 					>
 						<TextField
+							value={searchInput}
+							onChange={(e) => setSearchInput(e.target.value)}
 							InputProps={{
 								startAdornment: (
 									<InputAdornment
@@ -421,59 +464,234 @@ function Sidebar(props) {
 						/>
 						<Button
 							variant='contained'
-							color='success'
+							// color='success'
 							style={{
 								position: 'absolute',
 								right: 10,
 								top: 10,
+								textTrasform: 'none',
+								backgroundColor: 'indigo',
 							}}
+							onClick={() => searchPicture()}
 						>
 							Search
 						</Button>
-					</div>
-					<div
+					</Box>
+					<Box
+						sx={{
+							display: {
+								xs: 'none',
+								sm: 'flex',
+							},
+						}}
 						style={{
 							marginLeft: 20,
-							display: 'flex',
+							// display: 'flex',
 							alignItems: 'center',
 						}}
 					>
 						<div
 							style={{
 								marginRight: 30,
+								color: 'indigo',
 							}}
 						>
-							<Badge
-								badgeContent={3}
-								color='error'
-								anchorOrigin={{
-									vertical: 'bottom',
-									horizontal: 'right',
-								}}
-								overlap='circular'
+							<IconButton
+								color='inherit'
+								aria-label='open drawer'
+								edge='start'
+								onClick={handleClick}
+								// sx={{ mr: 2, display: { sm: 'none' } }}
 							>
-								<Notifications fontSize='large' />
-							</Badge>
+								<Badge
+									badgeContent={3}
+									color='error'
+									anchorOrigin={{
+										vertical: 'bottom',
+										horizontal: 'right',
+									}}
+									overlap='circular'
+								>
+									<Notifications fontSize='large' color='inherit' />
+								</Badge>
+							</IconButton>
+							<Menu
+								id='basic-menu'
+								anchorEl={anchorEl}
+								open={open}
+								onClose={handleClose}
+								MenuListProps={{
+									'aria-labelledby': 'basic-button',
+								}}
+							>
+								<MenuItem
+									onClick={handleClose}
+									style={{
+										display: 'flex',
+									}}
+								>
+									<Avatar
+										alt='Remy Sharp'
+										src={Person1}
+										style={{
+											marginRight: 10,
+										}}
+									/>
+									<div
+										style={{
+											display: 'flex',
+											marginRight: 25,
+											flexDirection: 'column',
+										}}
+									>
+										<span
+											style={{
+												color: 'grey',
+												fontSize: 14,
+											}}
+										>
+											Micheal liked you!
+										</span>
+										<span
+											style={{
+												color: 'grey',
+												fontSize: 11,
+											}}
+										>
+											About 20 minutes ago
+										</span>
+									</div>
+									<Favorite
+										fontSize='small'
+										style={{
+											color: '#ccc',
+										}}
+									/>
+								</MenuItem>
+								<Divider />
+								<MenuItem
+									onClick={handleClose}
+									style={{
+										display: 'flex',
+									}}
+								>
+									<Avatar
+										alt='Remy Sharp'
+										src={Person2}
+										style={{
+											marginRight: 10,
+										}}
+									/>
+									<div
+										style={{
+											display: 'flex',
+											marginRight: 28,
+											flexDirection: 'column',
+										}}
+									>
+										<span
+											style={{
+												fontSize: 14,
+												color: 'indigo',
+											}}
+										>
+											Jack liked you!
+										</span>
+										<span
+											style={{
+												fontSize: 11,
+											}}
+										>
+											About 40 minutes ago
+										</span>
+									</div>
+									<Favorite
+										fontSize='small'
+										style={{
+											color: 'red',
+										}}
+									/>
+								</MenuItem>
+								<Divider />
+								<MenuItem
+									onClick={handleClose}
+									style={{
+										display: 'flex',
+									}}
+								>
+									<Avatar
+										alt='Remy Sharp'
+										src={Person3}
+										style={{
+											marginRight: 10,
+										}}
+									/>
+									<div
+										style={{
+											display: 'flex',
+											marginRight: 20,
+											flexDirection: 'column',
+										}}
+									>
+										<span
+											style={{
+												fontSize: 14,
+												color: 'indigo',
+											}}
+										>
+											Martin commented
+											<br />
+											on your photo!
+										</span>
+										<span
+											style={{
+												fontSize: 11,
+											}}
+										>
+											About 56 minutes ago
+										</span>
+									</div>
+									<ChatBubble
+										fontSize='small'
+										style={{
+											color: 'indigo',
+										}}
+									/>
+								</MenuItem>
+							</Menu>
 						</div>
 						<Button
-							variant='contained'
+							// variant='contained'
 							style={{
 								textTransform: 'none',
+								color: 'indigo',
 							}}
 							endIcon={<KeyboardArrowDown />}
 						>
-							<Avatar
-								alt='Remy Sharp'
-								src={LogoImage}
+							<div
 								style={{
 									marginRight: 20,
 								}}
-							/>
-							<span>Abigail</span>
+							>
+								<Badge
+									// badgeContent={3}
+									color='success'
+									variant='dot'
+									anchorOrigin={{
+										vertical: 'bottom',
+										horizontal: 'right',
+									}}
+									overlap='circular'
+								>
+									<Avatar alt='Remy Sharp' src={Person4} />
+								</Badge>
+							</div>
+							<spans>Abigail</spans>
 						</Button>
-					</div>
+					</Box>
 				</Toolbar>
 			</AppBar>
+
 			<Box
 				component='nav'
 				sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -497,6 +715,61 @@ function Sidebar(props) {
 					}}
 				>
 					{drawer}
+					<Box
+						sx={{
+							display: {
+								xs: 'block',
+								sm: 'none',
+							},
+						}}
+						style={{
+							paddingInline: 10,
+						}}
+					>
+						<div
+							style={{
+								fontSize: 15,
+								fontWeight: 'bold',
+								color: '#666666',
+								marginBlock: 10,
+								fontFamily: 'Calibri',
+							}}
+						>
+							SEARCH
+						</div>
+
+						<TextField
+							value={searchInput}
+							onChange={(e) => setSearchInput(e.target.value)}
+							InputProps={{
+								startAdornment: (
+									<InputAdornment
+										position='start'
+										// style={{
+										// 	paddingLeft: 20,
+										// 	paddingRight: 10,
+										// }}
+									>
+										<SearchIcon fontSize='small' />
+									</InputAdornment>
+								),
+							}}
+							placeholder='Find Something...'
+							variant='outlined'
+							fullWidth
+						/>
+						<Button
+							variant='contained'
+							color='success'
+							fullWidth
+							style={{
+								marginTop: 20,
+							}}
+							onClick={() => searchPicture()}
+						>
+							Search
+						</Button>
+					</Box>
 				</Drawer>
 				<Drawer
 					variant='permanent'

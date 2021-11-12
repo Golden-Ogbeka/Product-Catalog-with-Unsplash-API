@@ -1,16 +1,26 @@
-import { KeyboardArrowDown } from '@mui/icons-material';
-import { Button, ButtonGroup, Tab, Tabs, Typography } from '@mui/material';
+import {
+	FavoriteBorder,
+	KeyboardArrowDown,
+	LocationOn,
+	ThumbDownOutlined,
+} from '@mui/icons-material';
+import { Button, ButtonGroup, Skeleton } from '@mui/material';
 import { Toolbar } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import Sidebar from '../layout/Sidebar';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+
 const drawerWidth = 240;
 
-function Homepage() {
+function Homepage(props) {
 	return (
 		<>
 			<Box sx={{ display: 'flex' }}>
-				<Sidebar />
+				<Sidebar pictures={props.pictures} setPictures={props.setPictures} />
 				<Box
 					component='main'
 					sx={{
@@ -21,6 +31,13 @@ function Homepage() {
 				>
 					<Toolbar />
 
+					<Box
+						sx={{
+							paddingTop: { xs: '30px', sm: 0 },
+							paddingBottom: { xs: '30px', sm: 0 },
+						}}
+					></Box>
+
 					<ButtonGroup
 						variant='outlined'
 						aria-label='outlined button group'
@@ -28,6 +45,12 @@ function Homepage() {
 							paddingTop: 50,
 							paddingBottom: 30,
 							color: 'grey',
+						}}
+						sx={{
+							display: {
+								xs: 'none',
+								lg: 'flex',
+							},
 						}}
 						fullWidth
 					>
@@ -192,37 +215,143 @@ function Homepage() {
 						</Button>
 					</ButtonGroup>
 
-					<div>
-						<Typography paragraph>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-							eiusmod tempor incididunt ut labore et dolore magna aliqua.
-							Rhoncus dolor purus non enim praesent elementum facilisis leo vel.
-							Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-							gravida rutrum quisque non tellus. Convallis convallis tellus id
-							interdum velit laoreet id donec ultrices. Odio morbi quis commodo
-							odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum
-							est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-							Metus vulputate eu scelerisque felis imperdiet proin fermentum
-							leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt
-							lobortis feugiat vivamus at augue. At augue eget arcu dictum
-							varius duis at consectetur lorem. Velit sed ullamcorper morbi
-							tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-						</Typography>
-						<Typography paragraph>
-							Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-							ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-							elementum integer enim neque volutpat ac tincidunt. Ornare
-							suspendisse sed nisi lacus sed viverra tellus. Purus sit amet
-							volutpat consequat mauris. Elementum eu facilisis sed odio morbi.
-							Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt
-							ornare massa eget egestas purus viverra accumsan in. In hendrerit
-							gravida rutrum quisque non tellus orci ac. Pellentesque nec nam
-							aliquam sem et tortor. Habitant morbi tristique senectus et.
-							Adipiscing elit duis tristique sollicitudin nibh sit. Ornare
-							aenean euismod elementum nisi quis eleifend. Commodo viverra
-							maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin
-							aliquam ultrices sagittis orci a.
-						</Typography>
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'space-between',
+							flexWrap: 'wrap',
+							alignItems: 'center',
+						}}
+					>
+						{props.pictures && props.pictures.length > 0 ? (
+							props.pictures.map((picture, index) => {
+								if (index === 0) {
+									return (
+										<Card sx={{ width: 280, marginBottom: 2 }} key={index}>
+											<CardMedia
+												component='img'
+												height='250'
+												image={picture.urls.full}
+												alt={picture.alt_description}
+											/>
+											<CardContent>
+												<div
+													style={{
+														fontSize: 18,
+														fontWeight: 'bold',
+														paddingBottom: 10,
+														fontFamily: 'Calibri',
+													}}
+												>
+													{picture.user.name}, {picture.user.total_photos}
+												</div>
+												<div
+													style={{
+														display: 'flex',
+														alignItems: 'center',
+														fontSize: 12,
+														fontFamily: 'Calibri',
+													}}
+												>
+													<LocationOn
+														fontSize='inherit'
+														style={{
+															color: 'grey',
+															marginRight: 5,
+														}}
+													/>
+													{picture.user.location}
+												</div>
+											</CardContent>
+											<CardActions
+												style={{
+													display: 'flex',
+													justifyContent: 'space-between',
+												}}
+											>
+												<Button
+													size='small'
+													variant='contained'
+													color='error'
+													fullWidth
+												>
+													<FavoriteBorder fontSize='small' />
+												</Button>
+												<Button
+													size='small'
+													variant='contained'
+													style={{
+														backgroundColor: 'indigo',
+														color: 'white',
+													}}
+													fullWidth
+												>
+													<ThumbDownOutlined fontSize='small' />
+												</Button>
+											</CardActions>
+										</Card>
+									);
+								} else
+									return (
+										<Card
+											sx={{ width: 300, marginBottom: 2 }}
+											key={index}
+											style={{
+												position: 'relative',
+											}}
+										>
+											<CardMedia
+												component='img'
+												height='350'
+												image={picture.urls.full}
+												alt={picture.alt_description}
+											/>
+											<div
+												style={{
+													backgroundColor: 'transparent',
+													color: 'white',
+													opacity: 1,
+													position: 'absolute',
+													bottom: 20,
+													left: 20,
+												}}
+											>
+												<div
+													style={{
+														fontSize: 18,
+														fontWeight: 'bold',
+														paddingBottom: 10,
+														fontFamily: 'Calibri',
+													}}
+												>
+													{picture.user.name}, {picture.user.total_photos}
+												</div>
+												<div
+													style={{
+														display: 'flex',
+														alignItems: 'center',
+														fontSize: 12,
+														fontFamily: 'Calibri',
+													}}
+												>
+													<LocationOn
+														fontSize='inherit'
+														style={{
+															color: 'inherit',
+															marginRight: 5,
+														}}
+													/>
+													{picture.user.location}
+												</div>
+											</div>
+										</Card>
+									);
+							})
+						) : (
+							<>
+								<Skeleton variant='rectangular' width={210} height={118} />
+							</>
+						)}
 					</div>
 				</Box>
 			</Box>
