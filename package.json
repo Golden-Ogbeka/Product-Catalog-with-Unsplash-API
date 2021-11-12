@@ -1,0 +1,31 @@
+{
+	"name": "product-catalog-with-unsplash-api",
+	"type": "module",
+	"version": "1.0.0",
+	"description": "A landing page with products, details and images gotten from Unsplash API. Built with React and NodeJS",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node index.js",
+		"dev": "nodemon index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Golden-Ogbeka/Product-Catalog-with-Unsplash-API.git"
+	},
+	"author": "Golden Ogbeka",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Golden-Ogbeka/Product-Catalog-with-Unsplash-API/issues"
+	},
+	"homepage": "https://github.com/Golden-Ogbeka/Product-Catalog-with-Unsplash-API#readme",
+	"dependencies": {
+		"dotenv": "^10.0.0",
+		"express": "^4.17.1",
+		"node-fetch": "^3.1.0",
+		"unsplash-js": "^7.0.15"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.15"
+	}
+}
