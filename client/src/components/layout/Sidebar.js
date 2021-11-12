@@ -471,6 +471,7 @@ function Sidebar(props) {
 								top: 10,
 								textTrasform: 'none',
 								backgroundColor: 'indigo',
+								textTransform: 'none',
 							}}
 							onClick={() => searchPicture()}
 						>
