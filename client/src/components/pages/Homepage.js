@@ -227,7 +227,7 @@ function Homepage(props) {
 							props.pictures.map((picture, index) => {
 								if (index === 0) {
 									return (
-										<Card sx={{ width: 280, marginBottom: 2 }} key={index}>
+										<Card sx={{ width: 300, marginBottom: 2 }} key={index}>
 											<CardMedia
 												component='img'
 												height='250'

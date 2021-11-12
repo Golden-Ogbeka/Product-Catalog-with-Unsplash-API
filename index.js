@@ -45,6 +45,7 @@ server.post('/api/pictures', async (req, res) => {
 		}
 		const Pictures = await unsplash.search.getPhotos({
 			query: searchInput,
+			perPage: 16,
 		});
 		return res.json({ Pictures: Pictures.response.results });
 	} catch (error) {
