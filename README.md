@@ -11,3 +11,7 @@ ReactJS, NodeJS, Unsplash-JS, Material UI, Node-Fetch
 - It loads with a single landing page
 - An initial list of 16 products is loaded
 - Users can search for any term and 16 products that match that query would be returned
+
+## Demo URL
+
+https://product-catalog-golden-ogbeka.herokuapp.com/
