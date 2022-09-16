@@ -14,4 +14,4 @@ ReactJS, NodeJS, Unsplash-JS, Material UI, Node-Fetch
 
 ## Demo URL
 
-https://product-catalog-golden-ogbeka.herokuapp.com/
+[https://product-catalog-golden-ogbeka.herokuapp.com/](https://product-catalog-golden-ogbeka.herokuapp.com/)
